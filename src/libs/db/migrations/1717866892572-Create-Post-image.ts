@@ -35,9 +35,9 @@ export class CreatePostImage1717866892572 implements MigrationInterface {
               default: 'now()',
             },
             {
-              name: 'deleted_at',
-              type: 'timestamp',
-              isNullable: true,
+              name: 'is_deleted',
+              type: 'boolean',
+              default: false,
             },
           ],
           foreignKeys: [

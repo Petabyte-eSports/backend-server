@@ -59,8 +59,8 @@ export abstract class AbstractRepo<T extends BaseEntity> {
     const metadata = repository.metadata;
     const hasDeletedAtColumn = metadata.columns.some(
       (column) =>
-        column.propertyName === 'deletedAt' ||
-        column.databaseName === 'deleted_at',
+        column.propertyName === 'is_deleted' ||
+        column.databaseName === 'is_deleted',
     );
     const options: FindOneOptions<T> = {
       where,
@@ -70,7 +70,7 @@ export abstract class AbstractRepo<T extends BaseEntity> {
     if (hasDeletedAtColumn) {
       options.where = {
         ...where,
-        deletedAt: null,
+        is_deleted: false,
       };
     }
     return repository.findOne(options);

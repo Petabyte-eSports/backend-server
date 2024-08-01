@@ -137,6 +137,12 @@ export class CreateUsersTable1717853159226 implements MigrationInterface {
               type: 'timestamp',
               default: 'CURRENT_TIMESTAMP',
             },
+            //is_deleted
+            {
+              name: 'is_deleted',
+              type: 'boolean',
+              default: false,
+            },
           ],
           foreignKeys: [
             {

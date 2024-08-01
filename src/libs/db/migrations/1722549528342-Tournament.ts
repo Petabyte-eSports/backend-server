@@ -98,6 +98,11 @@ export class Tournament1722549528342 implements MigrationInterface {
             type: 'timestamp',
             default: 'now()',
           },
+          {
+            name: 'is_deleted',
+            type: 'boolean',
+            default: false,
+          },
         ],
         foreignKeys: [
           {

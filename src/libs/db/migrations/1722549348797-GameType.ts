@@ -38,6 +38,11 @@ export class GameType1722549348797 implements MigrationInterface {
             type: 'timestamp',
             default: 'now()',
           },
+          {
+            name: 'is_deleted',
+            type: 'boolean',
+            default: false,
+          },
         ],
       }),
     );

@@ -37,9 +37,9 @@ export class CreatePostViewShare1717866441819 implements MigrationInterface {
               default: 'now()',
             },
             {
-              name: 'updated_at',
-              type: 'timestamp',
-              default: 'now()',
+              name: 'is_deleted',
+              type: 'boolean',
+              default: false,
             },
           ],
           foreignKeys: [
