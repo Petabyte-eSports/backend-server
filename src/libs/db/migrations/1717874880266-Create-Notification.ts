@@ -49,9 +49,9 @@ export class CreateNotification1717874880266 implements MigrationInterface {
               isNullable: true,
             },
             {
-              name: 'deleted_at',
-              type: 'timestamp',
-              isNullable: true,
+              name: 'is_deleted',
+              type: 'boolean',
+              default: false,
             },
           ],
           foreignKeys: [

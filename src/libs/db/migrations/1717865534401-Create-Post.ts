@@ -43,9 +43,9 @@ export class CreatePost1717865534401 implements MigrationInterface {
               isNullable: true,
             },
             {
-              name: 'deleted_at',
-              type: 'timestamp',
-              isNullable: true,
+              name: 'is_deleted',
+              type: 'boolean',
+              default: false,
             },
           ],
           foreignKeys: [

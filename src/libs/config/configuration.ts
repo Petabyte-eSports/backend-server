@@ -9,6 +9,9 @@ class Configuration {
   //CONSTANTS
 
   @IsString()
+  readonly CREATE_USER_QUEUE = 'create-user';
+
+  @IsString()
   readonly REDIS_URL = process.env.REDIS_URL;
 
   @IsString()
