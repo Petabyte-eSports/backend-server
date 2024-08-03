@@ -1,7 +1,17 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, Index, ManyToOne } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  Index,
+  ManyToOne,
+  JoinColumn, OneToOne,
+} from 'typeorm';
 import { BaseEntity } from '../../../libs/db/BaseEntity';
 import { Country } from '../../generic/country.entity';
 import { State } from '../../generic/state.entity';
+import { UserWalletEntity } from './user-wallet.entity';
 
 @Entity('users')
 export class UserEntity extends BaseEntity {
@@ -87,4 +97,8 @@ export class UserEntity extends BaseEntity {
   //is_deleted
   @Column({ type: 'boolean', default: false })
   is_deleted: boolean;
+
+  @OneToOne(() => UserWalletEntity, (wallet) => wallet.user, { eager: true })
+  @JoinColumn({ name: 'id', referencedColumnName: 'user_id' })
+  wallet: UserWalletEntity;
 }
