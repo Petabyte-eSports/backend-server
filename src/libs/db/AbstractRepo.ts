@@ -291,4 +291,139 @@ export abstract class AbstractRepo<T extends BaseEntity> {
       .getRawOne();
     return sum.sum || 0;
   }
+
+
+  async findPost(
+    pageSize?: number,
+    currentPage?: number,
+    where?: Record<string, any>,
+    order?: Record<string, any>,
+    relations?: FindOptionsRelations<T>,
+    top: boolean = false,
+    user_id?: string,
+  ): Promise<{
+    data: T[];
+    pagination?: { total: number; pageSize: number; currentPage: number };
+  }> {
+    pageSize = pageSize || 10;
+    currentPage = currentPage || 1;
+    const offset = (currentPage - 1) * pageSize;
+
+    const repository = readConnection.getRepository(this.entityTarget);
+    const tableName = repository.metadata.tableName;
+
+    const queryBuilder = repository.createQueryBuilder(tableName);
+
+    // Apply where conditions (if provided)
+    if (where) {
+      queryBuilder.where(where);
+    }
+
+    // Apply sorting (if provided)
+    if (order) {
+      queryBuilder.orderBy(order);
+    }
+
+    if (top) {
+      queryBuilder
+        .leftJoin('post_likes', 'pl', `${tableName}.id = pl.post_id`)
+        .leftJoinAndSelect(`${tableName}.images`, 'images')
+        .leftJoinAndSelect(`${tableName}.user`, 'user')
+        .groupBy(`${tableName}.id`)
+        .addGroupBy('pl.post_id')
+        .addGroupBy('images.id') // Ensure images columns are included in the GROUP BY clause
+        .addGroupBy('user.id') // Ensure user columns are included in the GROUP BY clause
+        .addGroupBy('images.created_at') // Include additional image columns if needed
+        .addGroupBy('user.updated_at') // Include additional image columns if needed
+        .addGroupBy('user.created_at') // Include additional image columns if needed
+        .having('COUNT(pl.post_id) > :likesThreshold', { likesThreshold: -1 }); // Adjust threshold as needed
+    }
+
+    // Handle nested relations eager loading
+    if (relations) {
+      Object.keys(relations).forEach((relation) => {
+        queryBuilder.leftJoinAndSelect(`${tableName}.${relation}`, relation);
+        if (relations[relation] && typeof relations[relation] === 'object') {
+          Object.keys(relations[relation]).forEach((nestedRelation) => {
+            queryBuilder.leftJoinAndSelect(
+              `${relation}.${nestedRelation}`,
+              nestedRelation,
+            );
+          });
+        }
+      });
+    }
+    queryBuilder
+      .loadRelationCountAndMap(`${tableName}.likeCount`, `${tableName}.likes`)
+      .loadRelationCountAndMap(
+        `${tableName}.commentCount`,
+        `${tableName}.comments`,
+      )
+      .loadRelationCountAndMap(
+        `${tableName}.shareCount`,
+        `${tableName}.views`,
+        'shares',
+        (qb) => qb.where('shares.type = :type', { type: 'share' }),
+      )
+      .loadRelationCountAndMap(
+        `${tableName}.viewCount`,
+        `${tableName}.views`,
+        'views',
+        (qb) => qb.where('views.type = :type', { type: 'view' }),
+      );
+
+    const [data, total] = await queryBuilder
+      .skip(offset)
+      .take(pageSize)
+      .getManyAndCount();
+
+    if (!data.length) {
+      return {
+        data: [],
+      };
+    }
+
+    // @ts-ignore
+    const ids = data.map((post) => post.id);
+    //check if user has liked the post
+    //select from post_likes where user_id = user_id and post_id in (ids)
+    const likedPosts = await readConnection
+      .getRepository('PostLikeEntity')
+      .find({
+        where: {
+          user_id,
+          post_id: In(ids),
+        },
+      });
+    //add liked field to the post as boolean
+    data.forEach((post) => {
+      // @ts-ignore
+      const likedPost = likedPosts.find((lp) => lp.post_id === post.id);
+      post['is_liked'] = !!likedPost;
+    });
+    //select from post_views where user_id = user_id and post_id in (ids)
+    const viewedPosts = await readConnection
+      .getRepository('PostViewEntity')
+      .find({
+        where: {
+          user_id,
+          post_id: In(ids),
+          type: 'share',
+        },
+      });
+    //add viewed field to the post as boolean
+    data.forEach((post) => {
+      // @ts-ignore
+      const viewedPost = viewedPosts.find((vp) => vp.post_id === post.id);
+      post['is_shared'] = !!viewedPost;
+    });
+    return {
+      data,
+      pagination: {
+        total,
+        pageSize,
+        currentPage,
+      },
+    };
+  }
 }
