@@ -16,6 +16,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { AuthGuard } from './modules/auth/guard/auth.guard';
 import { StateModule } from './modules/state/state.module';
 import { CountryModule } from './modules/country/country.module';
+import { PostModule } from './modules/post/post.module';
 
 @Module({
   imports: [
@@ -73,6 +74,7 @@ import { CountryModule } from './modules/country/country.module';
     CountryModule,
     FirebaseModule,
     StateModule,
+    PostModule,
   ],
   controllers: [AppController],
   providers: [
