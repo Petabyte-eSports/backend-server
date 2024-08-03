@@ -34,8 +34,4 @@ export class PaginationDto {
   @IsString()
   @IsOptional()
   keywords: string;
-
-  @IsString()
-  @IsOptional()
-  is_creator: boolean;
 }
