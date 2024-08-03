@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { BaseEntity } from '../../../libs/db/BaseEntity';
 import { UserEntity } from './user.entity';
 
@@ -10,7 +10,7 @@ export class UserWalletEntity extends BaseEntity {
   @Column({ type: 'uuid' })
   user_id: string;
 
-  @ManyToOne(() => UserEntity, user => user.id, { onDelete: 'CASCADE' })
+  @ManyToOne(() => UserEntity, (user) => user.id, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'user_id' })
   user: UserEntity;
 

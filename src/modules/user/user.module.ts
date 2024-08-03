@@ -4,6 +4,7 @@ import { UserController } from './user.controller';
 import { UserRepository } from './repositories/user.repository';
 import { UserFollowerRepository } from './repositories/user_follower_repository';
 import { UserWalletRepository } from './repositories/user_wallet.repository';
+import { PostRepository } from '../post/repos/post-repository';
 
 @Module({
   controllers: [UserController],
@@ -12,6 +13,7 @@ import { UserWalletRepository } from './repositories/user_wallet.repository';
     UserRepository,
     UserFollowerRepository,
     UserWalletRepository,
+    PostRepository,
   ],
 })
 export class UserModule {}
