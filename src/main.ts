@@ -1,8 +1,29 @@
-import { NestFactory } from '@nestjs/core';
+import { HttpAdapterHost, NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
+import {
+  ClassSerializerInterceptor,
+  VERSION_NEUTRAL,
+  VersioningType,
+} from '@nestjs/common';
+import { AllExceptionsFilter } from './libs/interceptor/validation-exception.filter';
+import { classValidatorPipeInstance } from './libs/pipe';
+import { Config } from './libs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  await app.listen(3000);
+  app.enableCors();
+  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
+  app.enableVersioning({
+    type: VersioningType.URI,
+    prefix: 'v',
+    defaultVersion: [VERSION_NEUTRAL, '1'],
+  });
+  //app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
+  app.useGlobalPipes(classValidatorPipeInstance());
+  const httpAdapterHost = app.get(HttpAdapterHost);
+  app.useGlobalFilters(new AllExceptionsFilter(httpAdapterHost));
+  await app.listen(Config.PORT || 4500, '0.0.0.0');
+  //print the url
+  console.log(`Application is running on: ${await app.getUrl()}/`);
 }
-bootstrap();
+bootstrap().then(() => console.log('Application is running'));
