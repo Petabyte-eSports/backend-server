@@ -104,6 +104,13 @@ class Configuration {
   @IsString()
   readonly FIREBASE_CREDENTIALS = process.env.FIREBASE_CREDENTIALS;
 
+  @IsString()
+  readonly CONNECTION_STRING = process.env.CONNECTION_STRING;
+
+  @IsString()
+  readonly AZURE_STORAGE_CONTAINER_NAME =
+    process.env.AZURE_STORAGE_CONTAINER_NAME;
+
   constructor() {
     const error = validateSync(this);
 

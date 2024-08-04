@@ -17,6 +17,9 @@ import { AuthGuard } from './modules/auth/guard/auth.guard';
 import { StateModule } from './modules/state/state.module';
 import { CountryModule } from './modules/country/country.module';
 import { PostModule } from './modules/post/post.module';
+import { TournamentModule } from './modules/tournament/tournament.module';
+import { GametypeModule } from './modules/gametype/gametype.module';
+import { MediaModule } from './modules/media/media.module';
 
 @Module({
   imports: [
@@ -75,6 +78,9 @@ import { PostModule } from './modules/post/post.module';
     FirebaseModule,
     StateModule,
     PostModule,
+    TournamentModule,
+    GametypeModule,
+    MediaModule,
   ],
   controllers: [AppController],
   providers: [
