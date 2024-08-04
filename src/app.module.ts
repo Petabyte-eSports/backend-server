@@ -20,6 +20,7 @@ import { PostModule } from './modules/post/post.module';
 import { TournamentModule } from './modules/tournament/tournament.module';
 import { GametypeModule } from './modules/gametype/gametype.module';
 import { MediaModule } from './modules/media/media.module';
+import { WalletModule } from './modules/wallet/wallet.module';
 
 @Module({
   imports: [
@@ -81,6 +82,7 @@ import { MediaModule } from './modules/media/media.module';
     TournamentModule,
     GametypeModule,
     MediaModule,
+    WalletModule,
   ],
   controllers: [AppController],
   providers: [

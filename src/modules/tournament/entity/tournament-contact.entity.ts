@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
-import { Tournament } from './tournament.entity';
 import { BaseEntity } from '../../../libs/db/BaseEntity';
 import { UserEntity } from '../../user/entity/user.entity';
+import { TournamentEntity } from './tournament.entity';
 
 @Entity('tournament_contacts')
 export class TournamentContact extends BaseEntity {
@@ -11,9 +11,9 @@ export class TournamentContact extends BaseEntity {
   @Column('uuid', { name: 'tournament_id' })
   tournamentId: string;
 
-  @ManyToOne(() => Tournament, { eager: true })
+  @ManyToOne(() => TournamentEntity, { eager: true })
   @JoinColumn({ name: 'tournament_id' })
-  tournament: Tournament;
+  tournament: TournamentEntity;
 
   @Column('uuid', { name: 'user_id' })
   userId: string;
