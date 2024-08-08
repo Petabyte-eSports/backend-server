@@ -10,6 +10,17 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
+export class PrizesDto {
+  @IsString()
+  first_place: string;
+
+  @IsString()
+  second_place: string;
+
+  @IsString()
+  third_place: string;
+}
+
 export class CreateTournamentDto {
   @IsString()
   tournament_name: string;
@@ -56,17 +67,6 @@ export class CreateTournamentDto {
   @IsDate()
   @Type(() => Date)
   end_date: Date;
-}
-
-export class PrizesDto {
-  @IsString()
-  first_place: string;
-
-  @IsString()
-  second_place: string;
-
-  @IsString()
-  third_place: string;
 }
 
 export class CreateJoinTournamentDto {
