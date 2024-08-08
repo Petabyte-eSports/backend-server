@@ -12,7 +12,7 @@ export class SendEmailConsumer {
   async transcode(job: Job<unknown>) {
     this.logger.debug('Started processing send email queue');
     console.log(job.data['user']);
-    await this.firebaseService.createUser(job.data['user']);
+    //await this.firebaseService.createUser(job.data['user']);
     this.logger.debug('Finished processing send email queue');
   }
 }

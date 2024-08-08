@@ -2,6 +2,7 @@ import { Logger } from '@nestjs/common';
 import { IsBoolean, IsInt, IsString, validateSync } from 'class-validator';
 
 import { config } from 'dotenv';
+import * as process from 'node:process';
 config();
 
 class Configuration {
@@ -110,6 +111,18 @@ class Configuration {
   @IsString()
   readonly AZURE_STORAGE_CONTAINER_NAME =
     process.env.AZURE_STORAGE_CONTAINER_NAME;
+
+  @IsString()
+  readonly BANK_URL = process.env.BANK_URL;
+
+  @IsString()
+  readonly BANK_AGENT_ID = process.env.BANK_AGENTID;
+
+  @IsString()
+  readonly BANK_AES_KEY = process.env.AES_KEY;
+
+  @IsString()
+  readonly BANK_IV_KEY = process.env.IV_KEY;
 
   constructor() {
     const error = validateSync(this);

@@ -10,18 +10,14 @@ export class FilesAzureService {
 
   private async getBlobServiceInstance() {
     const connectionString = this.configService.get('CONNECTION_STRING');
-    const blobClientService =
-      await BlobServiceClient.fromConnectionString(connectionString);
-    return blobClientService;
+    return BlobServiceClient.fromConnectionString(connectionString);
   }
 
   private async getBlobClient(imageName: string): Promise<BlockBlobClient> {
     const blobService = await this.getBlobServiceInstance();
     const containerName = this.containerName;
     const containerClient = blobService.getContainerClient(containerName);
-    const blockBlobClient = containerClient.getBlockBlobClient(imageName);
-
-    return blockBlobClient;
+    return containerClient.getBlockBlobClient(imageName);
   }
 
   public async uploadFile(file: Express.Multer.File, containerName: string) {

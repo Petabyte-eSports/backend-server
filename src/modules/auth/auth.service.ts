@@ -50,6 +50,8 @@ export class AuthService {
       user: user,
       type: Config.VERIFICATION_TYPE,
     });
+
+    ///Todo Create a replica for user on mongo db (name, avater, user_id, username)
     //return response
     return BaseResponse.success(
       null,
